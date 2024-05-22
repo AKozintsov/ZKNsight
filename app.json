@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.betomoedano.googlesignin"
@@ -26,6 +28,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": "myGoogleApp"
+    "scheme": "myGoogleApp",
+    "extra": {
+      "eas": {
+        "projectId": "225602b5-04f1-41a3-ac79-18b8048857d6"
+      }
+    }
   }
 }

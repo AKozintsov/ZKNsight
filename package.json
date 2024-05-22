@@ -8,21 +8,29 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@craftzdog/react-native-buffer": "^6.0.5",
+    "@expo/webpack-config": "^18.0.1",
+    "@mysten/sui.js": "^0.54.1",
+    "@mysten/zklogin": "^0.6.3",
+    "@react-native-async-storage/async-storage": "1.17.11",
+    "base-64": "^1.0.0",
+    "env.js": "^0.1.0",
     "expo": "~48.0.11",
-    "expo-status-bar": "~1.4.4",
-    "react": "18.2.0",
-    "react-native": "0.71.6",
     "expo-auth-session": "~4.0.3",
     "expo-crypto": "~12.2.1",
+    "expo-splash-screen": "~0.18.1",
+    "expo-status-bar": "~1.4.4",
     "expo-web-browser": "~12.1.1",
-    "react-native-web": "~0.18.10",
+    "fast-text-encoding": "^1.0.6",
+    "react": "18.2.0",
     "react-dom": "18.2.0",
-    "@expo/webpack-config": "^18.0.1",
-    "@react-native-async-storage/async-storage": "1.17.11",
-    "expo-splash-screen": "~0.18.1"
+    "react-native": "0.71.6",
+    "react-native-url-polyfill": "^2.0.0",
+    "react-native-web": "~0.18.10"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.18.9"
   },
   "private": true
 }
