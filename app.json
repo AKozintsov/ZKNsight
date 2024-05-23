@@ -28,7 +28,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": "myGoogleApp",
+    "scheme": "com.betomoedano.googlesignin",
     "extra": {
       "eas": {
         "projectId": "225602b5-04f1-41a3-ac79-18b8048857d6"
