@@ -1,14 +1,15 @@
-// Dashboard.js
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Pressable, Alert, FlatList, SafeAreaView } from 'react-native';
-import { Image } from 'expo-image';
+import { StyleSheet, View, FlatList, SafeAreaView, ActivityIndicator } from 'react-native';
 import { getFaasV2 } from "@flowx-pkg/ts-sdk"
+import ProtocolHeader from '../components/ProtocolHeader';
+import FlowXItem from '../components/FlowX/FlowXItem';
 
 export default function FlowX({ route ,navigation }) {
 
-    const { protocolName, image } = route.params;
+    const { image } = route.params;
 
     const [filteredPoolsData, setFilteredPoolsData] = useState(null)
+    const [isLoading, setIsLoading] = useState(true);
 
     const fetchPoolsAndFilter = async () => {
         const lpObjectIds = [
@@ -17,10 +18,23 @@ export default function FlowX({ route ,navigation }) {
             '0x3d0e0fc11224ab360adc04fd91324aea4d33253b84cab2186127c329054ecda7',
             '0x74de1ef7880c63398a55de8c893fc88dac3bc30e5601476eee8d21c06ea4a7ec'
         ];
-        let listGenesisX = await getFaasV2();
-        const filteredPools = listGenesisX.filter(pool => lpObjectIds.includes(pool.id));
-        console.log(filteredPools[0])
-        setFilteredPoolsData(filteredPools)
+        try {
+            const listGenesisX = await getFaasV2();
+            const filteredPools = listGenesisX.filter(pool => lpObjectIds.includes(pool.id));
+            setFilteredPoolsData(filteredPools);
+            setIsLoading(false);
+        } catch (error) {
+            console.error('Error fetching pools:', error);
+            setIsLoading(false);
+        }
+    }
+
+    const formatNumber = (num) => {
+        return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    const formatPercentage = (num) => {
+        return Number(parseFloat(num).toFixed(2))
     }
 
     useEffect(() => {
@@ -29,77 +43,19 @@ export default function FlowX({ route ,navigation }) {
 
     return (
         <View style={{flex: 1, backgroundColor: '#f5f5f5'}}>
-            <View style={styles.btnContainer}>
-                <Pressable style={styles.btnBack} onPress={() => navigation.goBack()}>
-                    <Text style={styles.label}>Back</Text>
-                </Pressable>
-                <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-                    <Image
-                        style={styles.image}
-                        source={{uri: image !== '' ? image : 'https://as1.ftcdn.net/jpg/01/09/84/42/220_F_109844212_NnLGUrn3RgMHQIuqSiLGlc9d419eK2dX.jpg'}}
-                        contentFit="cover"
-                        transition={1000}
-                    />
-                    <Text style={styles.coinName}>{protocolName}</Text>
+            <ProtocolHeader navigation={navigation} image={image} />
+            {isLoading ? (
+                <View style={styles.loaderContainer}>
+                    <ActivityIndicator size="large" color="#0000ff" />
                 </View>
-                {/* <Pressable style={styles.btnBack} onPress={async () => {
-                    await fetchNFTs()
-                    await fetchCoins()
-                }}>
-                    <Text style={styles.label}>Update</Text>
-                </Pressable> */}
-                {/* <Pressable style={styles.btn} onPress={() => Alert.alert('Account Info', `Wallet Address:\n\n${address}\n\nGoogle Email: ${email}`)}>
-                    <Text style={styles.label}>Account</Text>
-                </Pressable> */}
-            </View>
-            
-            {filteredPoolsData !== null ? (
+            ) : filteredPoolsData !== null && (
                 <SafeAreaView style={styles.itemContainer}>
                     <FlatList
                         data={filteredPoolsData}
-                        renderItem={({item}) => (
-                            <View style={styles.item}>
-                                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                    <Image
-                                        style={styles.image}
-                                        source={{uri: item.coinX.iconUrl !== '' ? item.coinX.iconUrl : 'https://as1.ftcdn.net/jpg/01/09/84/42/220_F_109844212_NnLGUrn3RgMHQIuqSiLGlc9d419eK2dX.jpg'}}
-                                        contentFit="cover"
-                                        transition={1000}
-                                    />
-                                    <Image
-                                        style={styles.image}
-                                        source={{uri: item.coinY.iconUrl !== '' ? item.coinY.iconUrl : 'https://as1.ftcdn.net/jpg/01/09/84/42/220_F_109844212_NnLGUrn3RgMHQIuqSiLGlc9d419eK2dX.jpg'}}
-                                        contentFit="cover"
-                                        transition={1000}
-                                    />
-                                    <View style={styles.infoContainer}>
-                                        <Text style={styles.coinName}>{item.coinX.symbol}{'/'}{item.coinY.symbol}</Text>
-                                        {/* <Text>{item.categories}</Text> */}
-                                    </View>
-                                </View>
-                                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10}}>
-                                    <View style={{flexDirection: 'column', flex: 1.3}}>
-                                        <Text>{'Reward: '}</Text>
-                                        <Text>{item.poolReward[0].amount / 1000000000}{' '}</Text>
-                                    </View>
-                                    <View style={{flexDirection: 'column', flex: 0.8}}>
-                                        <Text>{'APR: '}</Text>
-                                        <Text>{(Number(parseFloat(item.rewardApr).toFixed(2)) + Number(parseFloat(item.tradingApr).toFixed(2))).toFixed(2)}{' % '}</Text>
-                                    </View>
-                                    <View style={{flexDirection: 'column', flex: 0.8}}>
-                                        <Text>{'Total Liquid: '}</Text>
-                                        <Text>{'$'}{Number(parseFloat(item.totalLiquid).toFixed(2))}</Text>
-                                    </View>
-
-                                    
-                                    <Text></Text>
-                                </View>
-                            </View>
-                            
-                        )}
+                        renderItem={({item}) => <FlowXItem item={item} formatNumber={formatNumber} formatPercentage={formatPercentage} />}
                     />
                 </SafeAreaView>
-            ) : null}
+            )}
         </View>
     )
 }
@@ -129,8 +85,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     image: {
-        width: 20,
-        height: 20,
+        width: 40,
+        height: 40,
         borderRadius: 25,
         marginRight: 10,
     },
@@ -157,15 +113,10 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
     },
-    infoContainer: {
-        // flex: 1,
-    },
     coinName: {
         fontSize: 18,
         fontWeight: 'bold',
-        // marginBottom: 5,
         alignItems: 'center',
-        // marginTop: 3
     },
     coinValue: {
         fontSize: 16,
@@ -174,5 +125,39 @@ const styles = StyleSheet.create({
     priceChange: {
         fontSize: 14,
         marginTop: 5,
-    }
+    },
+    statisticsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 15,
+        backgroundColor: '#f4f4f4',
+        borderRadius: 10,
+    },
+    statistic: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '33%',
+    },
+    statLabel: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#666',
+        marginBottom: 5,
+    },
+    statValue: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    swapButton: {
+        padding: 10,
+        backgroundColor: '#ddd',
+        borderRadius: 5,
+    },
+    buttonLabel: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
 });

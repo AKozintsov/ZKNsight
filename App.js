@@ -1,17 +1,21 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './src/pages/Login';
 import Dashboard from './src/pages/Dashboard';
-import Protocols from './src/pages/Protocols';
 import FlowX from './src/pages/FlowX';
 import Bucket from './src/pages/Bucket';
-import Scallop from './src/pages/Scallop';
+import ScallopP from './src/pages/Scallop';
 import Kriya from './src/pages/Kriya';
 import Cetus from './src/pages/Cetus.js'
+import Swap from './src/pages/Swap.js';
+import * as SplashScreen from 'expo-splash-screen';
 
-const Stack = createStackNavigator();
+SplashScreen.preventAutoHideAsync();
+setTimeout(SplashScreen.hideAsync, 0);
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
     return (
@@ -19,12 +23,12 @@ export default function App() {
             <Stack.Navigator initialRouteName="Login" screenOptions={{headerShown: false}} >
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Dashboard" component={Dashboard} />
-                <Stack.Screen name="Protocols" component={Protocols} />
                 <Stack.Screen name="Cetus" component={Cetus} />
                 <Stack.Screen name="Bucket" component={Bucket} />
-                <Stack.Screen name="Scallop" component={Scallop} />
+                <Stack.Screen name="Scallop" component={ScallopP} />
                 <Stack.Screen name="Kriya" component={Kriya} />
                 <Stack.Screen name="FlowX" component={FlowX} />
+                <Stack.Screen name="Swap" component={Swap} />
             </Stack.Navigator>
         </NavigationContainer>
     );

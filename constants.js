@@ -1,18 +1,24 @@
-export const FULLNODE_URL = "https://fullnode.devnet.sui.io";
+export const FULLNODE_URL = "https://fullnode.mainnet.sui.io:443";
 
 export const ANDROID_CLIENT_ID =
-  "162663894145-7s2u94c6s4k37345f66d6cbd1ndpsbm2.apps.googleusercontent.com";
+  "162663894145-oe1jo3kvn087tkv3cqcvoljekcoafgni.apps.googleusercontent.com";
 
 export const WEB_CLIENT_ID =
 "162663894145-3lj29d0eqa71bhvs2slsau96612kmga7.apps.googleusercontent.com";
 
-export const USER_SALT_LOCAL_STORAGE_KEY = "121397862192512892096244528342159433147";
+export const USER_SALT_LOCAL_STORAGE_KEY = "";
 
 export const SUI_DEVNET_FAUCET = 'https://faucet.devnet.sui.io/gas'
 
 export const SUI_PROVER_DEV_ENDPOINT = 'https://prover-dev.mystenlabs.com/v1'
 
-export const WALLET_ID = '0xd4238ba11b46d1b829b7bfa00970c73d80ece6c2e81682034035ca3ebbaa971a'
+export const WALLET_ID = ''
+
+export const TOKEN_API_KEY = ''
+
+export const KRIYA_POOLS_TOKEN = ''
+
+export const ZETTABLOCK_X_API_KEY = ''
 
 // export const REDIRECT_URI = "https://sui-zklogin.vercel.app/";
 

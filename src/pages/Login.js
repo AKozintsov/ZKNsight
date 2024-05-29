@@ -1,6 +1,6 @@
 import '../../env';
 import React, { useState, useEffect } from 'react';
-import {StyleSheet, Text, View, Pressable, ActivityIndicator} from 'react-native';
+import {StyleSheet, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { generateNonce, generateRandomness, jwtToAddress, getExtendedEphemeralPublicKey, genAddressSeed, getZkLoginSignature } from '@mysten/zklogin';
@@ -12,6 +12,7 @@ import * as WebBrowser from "expo-web-browser";
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
 import { FULLNODE_URL, ANDROID_CLIENT_ID, WEB_CLIENT_ID, USER_SALT_LOCAL_STORAGE_KEY, SUI_DEVNET_FAUCET, SUI_PROVER_DEV_ENDPOINT} from '../../constants'
+import { Image } from 'expo-image';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -20,19 +21,19 @@ const suiClient = new SuiClient({ url: FULLNODE_URL });
 export default function Login({ navigation }) {
     const [nonceData, setNonceData] = useState('');
     const [ephemeralKeyPairData, setEphemeralKeyPairData] = useState(null);
-    const [loading, setLoading] = useState(false);
     const [authLoading, setAuthLoading] = useState(false);
-    const [token, setToken] = useState("");
     const [maxEpochData, setMaxEpochData] = useState(null);
     const [jwtRandomness, setJwtRandomness] = useState(null);
 
     const [request, response, promptAsync] = Google.useAuthRequest({
         androidClientId: ANDROID_CLIENT_ID,
-        // webClientId: WEB_CLIENT_ID,
+        webClientId: WEB_CLIENT_ID,
         extraParams: {
             nonce: nonceData || '',
         },
     });
+
+    console.log(response, request)
 
     useEffect(() => {
         const initialize = async () => {
@@ -49,7 +50,6 @@ export default function Login({ navigation }) {
 
                 const nonce = generateNonce(keyPair.getPublicKey(), maxEpoch, randomness);
 
-                // Ensure nonce is of the correct length
                 if (nonce.length !== 27) {
                     throw new Error(`Nonce length is incorrect: expected 27, got ${nonce.length}`);
                 }
@@ -64,15 +64,10 @@ export default function Login({ navigation }) {
     }, []);
 
     const createRandomEphemeralKeyPair = async () => {
-        setLoading(true);
-
         if (!nonceData) {
             console.error('Nonce not generated yet');
-            setLoading(false);
             return;
         }
-
-        setLoading(false);
 
         await promptAsync();
     };
@@ -81,13 +76,10 @@ export default function Login({ navigation }) {
         if (response?.type === 'success') {
             const { authentication } = response;
             if (authentication?.idToken) {
-                setAuthLoading(true); // Start auth loading
-                console.log('token:', authentication.idToken);
-                setToken(authentication.idToken);
+                setAuthLoading(true);
                 const decodedJwt = jwtDecode(authentication.idToken);
                 const salt = USER_SALT_LOCAL_STORAGE_KEY;
                 const zkLoginUserAddress = jwtToAddress(authentication.idToken, salt);
-                console.log('zkLoginUserAddress:', zkLoginUserAddress);
                 handleAuthenticationSuccess(authentication.idToken, zkLoginUserAddress, salt, decodedJwt);
             }
         }
@@ -97,19 +89,18 @@ export default function Login({ navigation }) {
         try {
             await AsyncStorage.setItem('zkLoginUserAddress', zkLoginUserAddress)
 
-            await requestFaucet(zkLoginUserAddress);
+            // await requestFaucet(zkLoginUserAddress);
 
-            const extendedEphemeralPublicKey = getExtendedEphemeralPublicKey(ephemeralKeyPairData.getPublicKey());
-            const partialZkLoginSignature = await zkProofApi(authToken, extendedEphemeralPublicKey, salt);
+            // const extendedEphemeralPublicKey = getExtendedEphemeralPublicKey(ephemeralKeyPairData.getPublicKey());
+            // const partialZkLoginSignature = await zkProofApi(authToken, extendedEphemeralPublicKey, salt);
 
-            await signTransaction(partialZkLoginSignature, decodedJwt, salt, zkLoginUserAddress);
+            // await signTransaction(partialZkLoginSignature, decodedJwt, salt, zkLoginUserAddress);
 
-            // Navigate to Dashboard
-            setAuthLoading(false); // End auth loading
+            setAuthLoading(false);
             navigation.navigate('Dashboard', { email: decodedJwt.email, address: zkLoginUserAddress });
         } catch (error) {
             console.error('Error in handleAuthenticationSuccess:', error);
-            setAuthLoading(false); // End auth loading
+            setAuthLoading(false);
         }
     };
 
@@ -147,6 +138,7 @@ export default function Login({ navigation }) {
         }
     };
 
+    // this could be used for swap and liquidity operations
     const signTransaction = async (partialZkLoginSignature, decodedJwt, salt, zkLoginUserAddress) => {
         try {
             const txb = new TransactionBlock();
@@ -178,33 +170,65 @@ export default function Login({ navigation }) {
     };
 
     return (
-        <View style={styles.container}>
+        <>
             {authLoading ? (
                 <ActivityIndicator size="large" color="#0000ff" />
             ) : (
-                <>
-                    <Text>Log in with Google</Text>
-                    <Pressable style={styles.btn} onPress={async() => await createRandomEphemeralKeyPair()} disabled={loading}>
-                        {loading ? <ActivityIndicator color="#fff" /> : <Text>Log in with Google</Text>}
-                    </Pressable>
-                </>
+                <View style={styles.container}>
+                    <Text style={styles.heading}>MANAGING ASSETS</Text>
+                    <Text style={styles.heading}>HAS NEVER BEEN</Text>
+                    <Text style={[styles.heading, {marginBottom: 20}]}>EASIER</Text>
+                    <TouchableOpacity
+                        style={styles.googleButton}
+                        onPress={async() => await createRandomEphemeralKeyPair()}
+                        disabled={!request}
+                    >
+                        <Image
+                            style={styles.image}
+                            source={{ uri: 'https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png' }}
+                            contentFit="cover"
+                            transition={1000}
+                        />
+                        <Text style={styles.buttonText}>Sign In with Google</Text>
+                    </TouchableOpacity>
+                </View>
             )}
-        </View>
+        </>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
         justifyContent: 'center',
-    },
-    btn: {
-        borderWidth: 1,
-        borderColor: "black",
-        padding: 10,
-        borderRadius: 10,
         alignItems: 'center',
+        backgroundColor: '#fff',
+        padding: 20,
+      },
+      heading: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        textAlign: 'center',
+      },
+      googleButton: {
+        flexDirection: 'row',
+        backgroundColor: '#050505',
+        borderWidth: 1,
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 50,
+      },
+      buttonText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#fff',
+        justifyContent: 'center',
+        alignSelf: 'center'
+      },
+      image: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        marginRight: 10,
     },
 });

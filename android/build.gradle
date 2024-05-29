@@ -6,6 +6,7 @@ buildscript {
         minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '21')
         compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '33')
         targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '33')
+        googlePlayServicesAuthVersion = "20.7.0"
         if (findProperty('android.kotlinVersion')) {
             kotlinVersion = findProperty('android.kotlinVersion')
         }
@@ -21,6 +22,7 @@ buildscript {
     dependencies {
         classpath('com.android.tools.build:gradle:7.4.1')
         classpath('com.facebook.react:react-native-gradle-plugin')
+        classpath 'com.google.gms:google-services:4.4.0'
     }
 }
 

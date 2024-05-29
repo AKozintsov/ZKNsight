@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "google-sign-in",
-    "slug": "google-sign-in",
+    "name": "zknsight",
+    "slug": "ZKNsight",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -9,26 +9,26 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#001634"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.betomoedano.googlesignin"
+      "bundleIdentifier": "com.zknsight"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#001634"
       },
-      "package": "com.betomoedano.googlesignin"
+      "package": "com.zknsight"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": "com.betomoedano.googlesignin",
+    "scheme": "com.zknsight",
     "extra": {
       "eas": {
         "projectId": "225602b5-04f1-41a3-ac79-18b8048857d6"
