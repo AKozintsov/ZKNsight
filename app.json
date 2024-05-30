@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "zknsight",
+    "slug": "ZKNsight",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#001634"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.zknsight"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#001634"
+      },
+      "package": "com.zknsight"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "scheme": "com.zknsight",
+    "extra": {
+      "eas": {
+        "projectId": "225602b5-04f1-41a3-ac79-18b8048857d6"
+      }
+    }
+  }
+}
