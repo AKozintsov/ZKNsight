@@ -1,4 +1,3 @@
-"""
 # ZKNSight Mobile App
 
 ZKNSight is a cutting-edge decentralized finance (DeFi) application designed to provide users with a seamless and secure experience in managing and trading their digital assets on the Sui network. This app leverages zkLogin's privacy-preserving authentication technology to ensure user data is protected while offering a comprehensive suite of DeFi functionalities.
@@ -64,4 +63,3 @@ If you encounter any issues or have any questions, please open an issue in the r
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-"""
