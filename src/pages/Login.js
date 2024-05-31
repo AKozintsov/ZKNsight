@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
         padding: 20,
       },
       heading: {
-        fontSize: 24,
+        fontSize: 56,
         fontWeight: 'bold',
         textAlign: 'center',
       },
