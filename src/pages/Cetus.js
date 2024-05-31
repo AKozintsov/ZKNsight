@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, FlatList, SafeAreaView, ActivityIndicator } from 'react-native';
+import {StyleSheet, View, FlatList, SafeAreaView, ActivityIndicator, Text} from 'react-native';
 import { api } from '../api/api';
 import CetusItem from '../components/Cetus/CetusItem';
 import ProtocolHeader from '../components/ProtocolHeader';
@@ -73,6 +73,12 @@ export default function Cetus({ route ,navigation }) {
             {loading ? (
                 <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
             ) : (
+                <>
+                <View style={styles.headingContainer}>
+                    <View style={styles.centered}>
+                        <Text style={styles.heading}>Pools</Text>
+                    </View>
+                </View>
                 <SafeAreaView style={styles.listContainer}>
                 <FlatList
                     data={statistics}
@@ -80,6 +86,7 @@ export default function Cetus({ route ,navigation }) {
                     keyExtractor={(item, index) => index.toString()}
                 />
                 </SafeAreaView>
+                </>
             )}
         </View>
     );
@@ -98,6 +105,30 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
       },
+    heading: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        width: '30%',
+        alignSelf: 'center',
+    },
+    headingContainer: {
+        backgroundColor: '#fff',
+        marginTop: 8,
+        marginHorizontal: 16,
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    centered: {
+        alignItems: 'center',
+        alignSelf: 'center'
+    },
 });
 
 

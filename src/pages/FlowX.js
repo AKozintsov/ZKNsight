@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, FlatList, SafeAreaView, ActivityIndicator } from 'react-native';
+import {StyleSheet, View, FlatList, SafeAreaView, ActivityIndicator, Text} from 'react-native';
 import { getFaasV2 } from "@flowx-pkg/ts-sdk"
 import ProtocolHeader from '../components/ProtocolHeader';
 import FlowXItem from '../components/FlowX/FlowXItem';
@@ -45,16 +45,23 @@ export default function FlowX({ route ,navigation }) {
         <View style={{flex: 1, backgroundColor: '#f5f5f5'}}>
             <ProtocolHeader navigation={navigation} image={image} />
             {isLoading ? (
-                <View style={styles.loaderContainer}>
+                <View style={styles.loader}>
                     <ActivityIndicator size="large" color="#0000ff" />
                 </View>
             ) : filteredPoolsData !== null && (
+                <>
+                <View style={styles.headingContainer}>
+                    <View style={styles.centered}>
+                        <Text style={styles.heading}>Pools</Text>
+                    </View>
+                </View>
                 <SafeAreaView style={styles.itemContainer}>
                     <FlatList
                         data={filteredPoolsData}
                         renderItem={({item}) => <FlowXItem item={item} formatNumber={formatNumber} formatPercentage={formatPercentage} />}
                     />
                 </SafeAreaView>
+                </>
             )}
         </View>
     )
@@ -159,5 +166,33 @@ const styles = StyleSheet.create({
     buttonLabel: {
         fontSize: 16,
         fontWeight: 'bold',
+    },
+    loader: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+    heading: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        width: '30%',
+        alignSelf: 'center',
+    },
+    headingContainer: {
+        backgroundColor: '#fff',
+        marginTop: 8,
+        marginHorizontal: 16,
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    centered: {
+        alignItems: 'center',
+        alignSelf: 'center'
     },
 });

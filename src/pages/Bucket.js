@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, FlatList, SafeAreaView, ActivityIndicator } from 'react-native';
+import {StyleSheet, View, FlatList, SafeAreaView, ActivityIndicator, Text} from 'react-native';
 import { BucketClient } from 'bucket-protocol-sdk/dist';
 import { api } from '../api/api';
 import TotalBuckContainer from '../components/Bucket/TotalBuckContainer';
@@ -61,6 +61,12 @@ export default function Bucket({ route, navigation }) {
             {loading ? (
                 <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
             ) : (
+                <>
+                <View style={styles.headingContainer}>
+                    <View style={styles.centered}>
+                        <Text style={styles.heading}>Pools</Text>
+                    </View>
+                </View>
                 <SafeAreaView style={styles.listContainer}>
                     <FlatList
                         data={tanks}
@@ -68,6 +74,7 @@ export default function Bucket({ route, navigation }) {
                         keyExtractor={(item, index) => index.toString()}
                     />
                 </SafeAreaView>
+                </>
             )}
         </View>
     );
@@ -85,5 +92,29 @@ const styles = StyleSheet.create({
     listContainer: {
         flex: 1,
         backgroundColor: '#f5f5f5',
+    },
+    heading: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        width: '30%',
+        alignSelf: 'center',
+    },
+    headingContainer: {
+        backgroundColor: '#fff',
+        marginTop: 8,
+        marginHorizontal: 16,
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    centered: {
+        alignItems: 'center',
+        alignSelf: 'center'
     },
 });

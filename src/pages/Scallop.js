@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     },
     headingContainer: {
         backgroundColor: '#fff',
-        marginVertical: 8,
+        marginTop: 8,
         marginHorizontal: 16,
         borderRadius: 10,
         shadowColor: '#000',
