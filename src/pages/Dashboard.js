@@ -5,14 +5,21 @@ import CoinItem from '../components/Dashboard/CoinItem';
 import NFTItem from '../components/Dashboard/NFTItem';
 import Header from '../components/Dashboard/DashboardHeader';
 import ProtocolItem from '../components/Dashboard/ProtocolItem';
+import EventItem from '../components/Dashboard/EventItem';
 
 export default function Dashboard({ route, navigation }) {
     const { email, address } = route.params;
 
     const supportedProtocols = ['flowx', 'bucket', 'cetus', 'kriya', 'scallop']
 
+    const requiredEvents = [
+        '0x61c9c39fd86185ad60d738d4e52bd08bda071d366acde07e07c3916a2d75a816::distribution::DEEPWrapper',
+        '0x41a3350004440adf89a2f837c1e4c0bf1fe4edf6e08b56383ccb5c1606f210c1::attendance::Attendance'
+    ]
+
     const [coinsData, setCoinsData] = useState(null);
     const [NFTsData, setNFTsData] = useState(null);
+    const [eventsData, setEventsData] = useState(null);
     const [portfoliosData, setPortfoliosData] = useState(null)
     const [showSection, setShowSection] = useState('coins');
 
@@ -29,6 +36,24 @@ export default function Dashboard({ route, navigation }) {
         try {
             const res = await api.getNFTs(address); // address
             setNFTsData(res.data.result.data);
+        } catch (error) {
+            console.error('Error fetching NFTs:', error);
+        }
+    }
+
+    const fetchEvents = async () => {
+        try {
+            const res = await api.getEvents(address); // address
+            const filteredEventsData = res.data.result.data.filter(event => requiredEvents.includes(event.objectType)).map(event => {
+                if (event.name.toLowerCase().includes('deep')) {
+                    event.description = 'Congratulations! You are eligible for DEEP Token Airdrop!'
+                    return event
+                } else {
+                    event.description = 'Congratulations! You participated in the SUI Hackathon 2024!'
+                    return event
+                }
+            })
+            setEventsData(filteredEventsData);
         } catch (error) {
             console.error('Error fetching NFTs:', error);
         }
@@ -83,6 +108,7 @@ export default function Dashboard({ route, navigation }) {
         fetchCoins()
         fetchNFTs()
         fetchAndFilterPortfolios()
+        fetchEvents()
     }, [])
 
     return (
@@ -116,6 +142,14 @@ export default function Dashboard({ route, navigation }) {
                                 <ProtocolItem protocol={item} />
                             </Pressable>
                         )}
+                    />
+                </SafeAreaView>
+            )}
+            {eventsData && showSection === 'events' && (
+                <SafeAreaView style={styles.itemContainer}>
+                    <FlatList
+                        data={eventsData}
+                        renderItem={({item}) => <EventItem nft={item} />}
                     />
                 </SafeAreaView>
             )}

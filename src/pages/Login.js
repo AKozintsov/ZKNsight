@@ -33,8 +33,6 @@ export default function Login({ navigation }) {
         },
     });
 
-    console.log(response, request)
-
     useEffect(() => {
         const initialize = async () => {
             try {

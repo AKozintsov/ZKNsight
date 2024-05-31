@@ -16,6 +16,9 @@ export const api = {
     getNFTs: async (walletId) => {
         return await axios.get(`https://api.blockeden.xyz/sui-indexer/67nCBdZQSH9z3YqDDjdm/account/nfts?account=${walletId}`)
     },
+    getEvents: async (walletId) => {
+        return await axios.get(`https://api.blockeden.xyz/sui-indexer/jBQLBdEWG4xk6fmaWshS/nft/accountCollection?owner=${walletId}&pageSize=50`)
+    },
     getPortfolios: async () => {
         return await axios.post('https://api.zettablock.com/api/v1/dataset/sq_fef80ff0abd7431298553e933f8de34b/graphql', {query}, {
             headers: {

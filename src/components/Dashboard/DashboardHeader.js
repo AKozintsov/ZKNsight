@@ -30,6 +30,12 @@ const Header = ({ onBack, onAccount, onToggle, showSection }) => (
       >
         <Text style={[styles.switchButtonText, showSection === 'protocols' && styles.activeSwitchButtonText]}>Protocols</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.switchButton, showSection === 'events' && styles.activeSwitchButton]}
+        onPress={() => onToggle('events')}
+      >
+        <Text style={[styles.switchButtonText, showSection === 'events' && styles.activeSwitchButtonText]}>Events</Text>
+      </TouchableOpacity>
     </View>
   </View>
 );
